@@ -28,57 +28,73 @@ public class Testing {
         workWithMenu( driver, new String[] { "Договор", "Список доступных договоров (Ctrl+Alt+O)" } );
 
         waitLoading( driver, 1 );
+
+        //создаем новый фильтр
         WebElement element = driver.findElement( By.xpath( "//div[contains(text(), 'новый')][1]" ) );
         new Actions( driver ).doubleClick( element ).build().perform();
 
         waitLoading( driver, 1 );
         try{
+            // Закрываем окно с предупреждением
             Alert alert = driver.switchTo().alert();
             alert.accept();
         } catch ( Exception e ) {}
 
+        // Нажимаем на таб "Дополнительные"
         element = driver.findElement( By.xpath( "//span[@class='x-tab-strip-text  ' and text()='Дополнительные']" ) );
         element.click();
 
         waitLoading( driver, 2 );
 
+        // Жмакаем на справочник
         element = driver.findElement( By.xpath( "//button[@class='GLSHMSKDOG']" ) );
         element.click();
 
         waitLoading( driver, 2 );
 
+        // Выбираем чек-бокс "Проектное финансирование (ЮЛ)
         element = driver.findElement( By.xpath( "//div[text()='Проектное финансирование (ЮЛ)']/." +
                 "./preceding-sibling::node()") );
         element.click();
 
+        // Нажимаем на кнопку "Открыть"
         element = driver.findElement( By.xpath( "//button[@class='x-btn-text' and text() = 'Открыть']" ) );
         element.click();
         
         waitLoading( driver, 1 );
 
+        // Применяем фильтр
         element = driver.findElement( By.xpath( "//button[@class='x-btn-text ' and text() = 'Применить']" ) );
         element.click();
 
         waitLoading( driver, 1 );
 
+        // Список договоров
         final List<WebElement> elements =
                 driver.findElements( By.xpath( "//div[@class='x-grid3-body']/child::node()" ) );
 
         for ( int i = 0; i < elements.size(); i ++  ) {
+            // Запоминаем номер договора в строке
             String packNumber = driver.findElement( By.xpath( "//div[@class='x-grid3-body']/child::node()[" + (i +1) +
                     "]//td[@class='x-grid3-col x-grid3-cell x-grid3-td-sPackTitle   x-treegrid-column']//span[2]"
             ) ).getText();
 
+            // Вызываем контекстное меню
             new Actions( driver ).contextClick(
+                    // FIXME Костыль, по идее можно пользоваться списком полученным до этого,
+                    // но так почему-то не заработало.
+                    // Разбираться лень
                     driver.findElement( By.xpath( "//div[@class='x-grid3-body']/child::node()["+(i+1)+"]" ) )
             ).build().perform();
 
+            // Выбираем пункт меню
             element = driver.findElement( By.xpath( "//a[text() = 'Треб. банка о доср. погашении']" ) );
 
             element.click();
 
             waitLoading( driver, 2 );
 
+            // Находим номер договора в окне "Требования банка о досрочном погашении"
             element = driver.findElement( By.xpath(
                     "//div[@class='gwt-Label GLSHMSKDNO' and text()='Договор :']/../following-sibling::node()/div"
             ) );
@@ -86,7 +102,8 @@ public class Testing {
             System.out.println( packNumber.equals( element.getText() ) );
             System.out.println( "packNumber = " + packNumber );
             System.out.println( "el = " + element.getText() );
-            
+
+            // Закрываем окно
             element = driver.findElement( By.xpath( "//button[@class = 'x-btn-text ' and text()= 'Выход' ]" ) );
             element.click();
 
