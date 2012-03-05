@@ -96,12 +96,12 @@ public class Testing {
 
             // Находим номер договора в окне "Требования банка о досрочном погашении"
             element = driver.findElement( By.xpath(
-                    "//div[@class='gwt-Label GLSHMSKDNO' and text()='Договор :']/../following-sibling::node()/div"
+                    "//div[contains( @class, 'gwt-Label' ) and text()='Договор :']/../following-sibling::node()/div"
             ) );
 
-            System.out.println( packNumber.equals( element.getText() ) );
-            System.out.println( "packNumber = " + packNumber );
-            System.out.println( "el = " + element.getText() );
+            System.out.println( "packNumberInTable  = " + packNumber );
+            System.out.println( "packNumberInWindow = " + element.getText() );
+            System.out.println( "Are they equal? " + packNumber.equals( element.getText() ) );
 
             // Закрываем окно
             element = driver.findElement( By.xpath( "//button[@class = 'x-btn-text ' and text()= 'Выход' ]" ) );
@@ -110,6 +110,8 @@ public class Testing {
             waitLoading( driver, 1 );
         }
 
+
+        driver.close();
     }
 
     private static void workWithMenu( WebDriver driver, String[] path ) {
