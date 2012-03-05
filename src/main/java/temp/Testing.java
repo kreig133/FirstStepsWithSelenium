@@ -17,6 +17,7 @@ public class Testing {
 
         Selenium selenium = new WebDriverBackedSelenium(driver, args[0]);
 
+        selenium.setTimeout( "60000" );
         selenium.open( args[0] );
 
         waitLoading( driver, 1 );
